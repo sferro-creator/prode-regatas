@@ -112,7 +112,7 @@ export default function Home() {
       <div className="h-1.5 w-40 bg-[#F6C83E] rounded-full mb-8 mx-auto shadow-lg"></div>
       
       <p className="text-[#F6C83E] font-semibold text-lg bg-[#002B71] px-6 py-2 rounded-full mb-12 shadow-inner inline-block">
-        ¡Hola, {user.nombre.split(' ')[0]}! — Panel Oficial CRBV
+        ¡Hola, {user.nombre.split(' ')[0]}! — Panel Oficial Club deRegatas Bella Vista
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl text-left">
