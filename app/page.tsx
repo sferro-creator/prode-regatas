@@ -112,14 +112,14 @@ export default function Home() {
       <div className="h-1.5 w-40 bg-[#F6C83E] rounded-full mb-8 mx-auto shadow-lg"></div>
       
       <p className="text-[#F6C83E] font-semibold text-lg bg-[#002B71] px-6 py-2 rounded-full mb-12 shadow-inner inline-block">
-        ¡Hola, {user.nombre.split(' ')[0]}! — Panel Oficial Club deRegatas Bella Vista
+        ¡Hola, {user.nombre.split(' ')[0]}! — Panel Oficial Club de Regatas Bella Vista
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl text-left">
         <Link href="/predicciones" className="p-10 bg-[#002B71] rounded-3xl border border-[#003C9E] hover:border-[#F6C83E] transition-all shadow-2xl group">
           <div className="text-6xl mb-6 text-center group-hover:scale-110 transition-transform">⚽️</div>
           <h2 className="text-3xl font-bold mb-3 text-white">Mis Predicciones</h2>
-          <p className="text-slate-400 text-sm italic">Cargá tus resultados para el Plantel Superior de Hockey.</p>
+          <p className="text-slate-400 text-sm italic">Cargá tus pronosticos para sumar puntos en la tabla general.</p>
         </Link>
         <div className="p-10 bg-[#002B71]/40 rounded-3xl border border-[#003C9E] opacity-60">
           <div className="text-6xl mb-6 text-center">🏆</div>
