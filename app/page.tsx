@@ -14,6 +14,7 @@ export default function Home() {
   const [user, setUser] = useState<Usuario | null>(null);
   const [formData, setFormData] = useState<Usuario>({ nombre: '', mail: '', telefono: '' });
   const [loading, setLoading] = useState(false);
+  const [isLogin, setIsLogin] = useState(true); // Nuevo: control de Login vs Registro
 
   useEffect(() => {
     const savedUser = localStorage.getItem('prode_user');
@@ -26,32 +27,51 @@ export default function Home() {
     }
   }, []);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     
-    // Log para ver qué estamos intentando mandar (solo lo ves vos en F12)
-    console.log("Intentando registrar:", formData);
-
     try {
-      const { data, error } = await supabase
-        .from('usuarios')
-        .insert([{ 
-          nombre: formData.nombre, 
-          email: formData.mail, // <--- REVISÁ: ¿En tu tabla dice 'email' o 'mail'?
-          telefono: formData.telefono 
-        }]);
+      if (isLogin) {
+        // --- LÓGICA DE LOGIN (BUSCAR) ---
+        const { data, error } = await supabase
+          .from('usuarios')
+          .select('*')
+          .eq('mail', formData.mail.toLowerCase())
+          .single();
 
-      if (error) {
-        // Esto nos va a decir si es un error de permisos o de nombre de tabla
-        console.error("Error técnico de Supabase:", error);
-        alert(`Error de base de datos: ${error.message} (Código: ${error.code})`);
+        if (error || !data) {
+          alert("El email no está registrado. Por favor, seleccioná 'Registrarme'.");
+        } else {
+          localStorage.setItem('prode_user', JSON.stringify(data));
+          setUser(data);
+        }
       } else {
-        localStorage.setItem('prode_user', JSON.stringify(formData));
-        setUser(formData);
+        // --- LÓGICA DE REGISTRO (INSERTAR) ---
+        const { data, error } = await supabase
+          .from('usuarios')
+          .insert([{ 
+            nombre: formData.nombre, 
+            mail: formData.mail.toLowerCase(), 
+            telefono: formData.telefono 
+          }])
+          .select();
+
+        if (error) {
+          if (error.code === '23505') { // Error de mail duplicado
+            alert("Este mail ya existe. ¡Iniciá sesión directamente!");
+            setIsLogin(true);
+          } else {
+            console.error("Error técnico:", error);
+            alert(`Error: ${error.message}`);
+          }
+        } else if (data) {
+          localStorage.setItem('prode_user', JSON.stringify(data[0]));
+          setUser(data[0]);
+        }
       }
     } catch (err: any) {
-      alert("Error de conexión: No se pudo alcanzar el servidor.");
+      alert("Error de conexión con el servidor.");
     } finally {
       setLoading(false);
     }
@@ -64,27 +84,44 @@ export default function Home() {
           <div className="w-24 h-24 relative mx-auto mb-6 rounded-full border-2 border-[#F6C83E] overflow-hidden bg-white">
             <Image src="/logo-regatas.jpg" alt="Logo" fill className="object-contain" />
           </div>
-          <h2 className="text-2xl font-black text-[#F6C83E] mb-6 uppercase tracking-tighter">¡Bienvenido al PRODE!</h2>
-          <form onSubmit={handleLogin} className="space-y-4 text-left">
-            <input 
-              type="text" placeholder="Nombre y Apellido" required
-              className="w-full p-4 bg-[#001D4A] border border-[#003C9E] rounded-xl focus:border-[#F6C83E] outline-none text-white"
-              onChange={(e) => setFormData({...formData, nombre: e.target.value})}
-            />
+          <h2 className="text-2xl font-black text-[#F6C83E] mb-2 uppercase tracking-tighter">
+            {isLogin ? "¡HOLA DE NUEVO!" : "¡BIENVENIDO AL PRODE!"}
+          </h2>
+          <p className="text-slate-400 text-[10px] font-bold tracking-widest mb-6 uppercase">
+            {isLogin ? "Iniciá sesión para continuar" : "Completá tus datos para jugar"}
+          </p>
+
+          <form onSubmit={handleAuth} className="space-y-4 text-left">
+            {!isLogin && (
+              <input 
+                type="text" placeholder="Nombre y Apellido" required
+                className="w-full p-4 bg-[#001D4A] border border-[#003C9E] rounded-xl focus:border-[#F6C83E] outline-none text-white font-bold uppercase"
+                onChange={(e) => setFormData({...formData, nombre: e.target.value})}
+              />
+            )}
             <input 
               type="email" placeholder="Email" required
-              className="w-full p-4 bg-[#001D4A] border border-[#003C9E] rounded-xl focus:border-[#F6C83E] outline-none text-white"
+              className="w-full p-4 bg-[#001D4A] border border-[#003C9E] rounded-xl focus:border-[#F6C83E] outline-none text-white font-bold lowercase"
               onChange={(e) => setFormData({...formData, mail: e.target.value})}
             />
-            <input 
-              type="tel" placeholder="WhatsApp" required
-              className="w-full p-4 bg-[#001D4A] border border-[#003C9E] rounded-xl focus:border-[#F6C83E] outline-none text-white"
-              onChange={(e) => setFormData({...formData, telefono: e.target.value})}
-            />
+            {!isLogin && (
+              <input 
+                type="tel" placeholder="WhatsApp" required
+                className="w-full p-4 bg-[#001D4A] border border-[#003C9E] rounded-xl focus:border-[#F6C83E] outline-none text-white font-bold"
+                onChange={(e) => setFormData({...formData, telefono: e.target.value})}
+              />
+            )}
             <button type="submit" disabled={loading} className="w-full py-5 bg-[#F6C83E] text-[#001D4A] font-black rounded-xl uppercase tracking-widest shadow-lg active:scale-95 transition-all">
-              {loading ? "REGISTRANDO..." : "EMPEZAR A JUGAR"}
+              {loading ? "CARGANDO..." : isLogin ? "ENTRAR" : "EMPEZAR A JUGAR"}
             </button>
           </form>
+
+          <button 
+            onClick={() => setIsLogin(!isLogin)}
+            className="mt-8 text-[10px] text-slate-400 font-bold uppercase tracking-widest hover:text-[#F6C83E] transition-colors"
+          >
+            {isLogin ? "¿No tenés cuenta? Registrate acá" : "¿Ya tenés cuenta? Inicia sesión"}
+          </button>
         </div>
       </main>
     );
@@ -96,7 +133,6 @@ export default function Home() {
         <Image src="/logo-regatas.jpg" alt="Escudo" fill className="object-cover" />
       </div>
 
-      {/* Título con el degradado y la letra original recuperada */}
       <h1 
         className="text-6xl font-black tracking-tighter mb-4 uppercase"
         style={{
