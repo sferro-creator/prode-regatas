@@ -12,7 +12,7 @@ interface Usuario {
 
 export default function Home() {
   const [user, setUser] = useState<Usuario | null>(null);
-  const [formData, setFormData] = useState<Usuario>({ nombre: '', mail: '', telefono: '' });
+  const [formData, setFormData] = useState<Usuario>({ nombre: '', email: '', telefono: '' });
   const [loading, setLoading] = useState(false);
   const [isLogin, setIsLogin] = useState(true); // Nuevo: control de Login vs Registro
 
@@ -37,7 +37,7 @@ export default function Home() {
         const { data, error } = await supabase
           .from('usuarios')
           .select('*')
-          .eq('mail', formData.mail.toLowerCase())
+          .eq('email', formData.email.toLowerCase())
           .single();
 
         if (error || !data) {
@@ -52,14 +52,14 @@ export default function Home() {
           .from('usuarios')
           .insert([{ 
             nombre: formData.nombre, 
-            mail: formData.mail.toLowerCase(), 
+            email: formData.email.toLowerCase(), 
             telefono: formData.telefono 
           }])
           .select();
 
         if (error) {
-          if (error.code === '23505') { // Error de mail duplicado
-            alert("Este mail ya existe. ¡Iniciá sesión directamente!");
+          if (error.code === '23505') { // Error de email duplicado
+            alert("Este email ya existe. ¡Iniciá sesión directamente!");
             setIsLogin(true);
           } else {
             console.error("Error técnico:", error);
@@ -102,7 +102,7 @@ export default function Home() {
             <input 
               type="email" placeholder="Email" required
               className="w-full p-4 bg-[#001D4A] border border-[#003C9E] rounded-xl focus:border-[#F6C83E] outline-none text-white font-bold lowercase"
-              onChange={(e) => setFormData({...formData, mail: e.target.value})}
+              onChange={(e) => setFormData({...formData, email: e.target.value})}
             />
             {!isLogin && (
               <input 
