@@ -157,11 +157,13 @@ export default function Home() {
           <h2 className="text-3xl font-bold mb-3 text-white">Mis Predicciones</h2>
           <p className="text-slate-400 text-sm italic">Cargá tus pronosticos para sumar puntos en la tabla general.</p>
         </Link>
-        <div className="p-10 bg-[#002B71]/40 rounded-3xl border border-[#003C9E] opacity-60">
-          <div className="text-6xl mb-6 text-center">🏆</div>
+        
+        {/* BOTÓN DE RANKING ACTIVADO */}
+        <Link href="/ranking" className="p-10 bg-[#002B71] rounded-3xl border border-[#003C9E] hover:border-[#F6C83E] transition-all shadow-2xl group">
+          <div className="text-6xl mb-6 text-center group-hover:scale-110 transition-transform">🏆</div>
           <h2 className="text-3xl font-bold mb-3 text-white">Ranking General</h2>
-          <p className="text-slate-400 text-sm">Próximamente disponible.</p>
-        </div>
+          <p className="text-slate-400 text-sm">Mirá quién lidera la tabla y cómo vienen los puntos.</p>
+        </Link>
       </div>
 
       <div className="mt-20 p-8 w-full max-w-6xl bg-[#001D4A]/50 rounded-3xl border border-[#003C9E] flex flex-col items-center justify-center text-center gap-4">
