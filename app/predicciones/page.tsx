@@ -242,8 +242,7 @@ export default function Predicciones() {
     : ['ELIMINACIÓN DIRECTA'];
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-4 md:p-10 bg-[#001D4A] text-white font-sans">
-      return (    
+    <main className="flex min-h-screen flex-col items-center p-4 md:p-10 bg-[#001D4A] text-white font-sans"> 
     {/* --- NUEVA UBICACIÓN DEL BOTÓN --- */}
     <div className="w-full max-w-7xl flex justify-start mb-8">
       <Link 
