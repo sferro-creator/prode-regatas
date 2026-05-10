@@ -44,39 +44,50 @@ export default function Predicciones() {
     });
   };
 
-  const guardarPrediccion = async (partidoId: string) => {
-    const partidoInfo = fixture.find(f => f.id === partidoId);
-    if (!partidoInfo) return;
+ const guardarPrediccion = async (partidoId: string) => {
+  const partidoInfo = fixture.find(f => f.id === partidoId);
+  
+  // 1. Verificamos que el partido exista
+  if (!partidoInfo) {
+    console.error("Partido no encontrado");
+    return;
+  }
 
-    const fechaP = new Date(`${partidoInfo.fecha_iso}T${partidoInfo.hora}:00`);
-    const limite = new Date(fechaP.getTime() - 10 * 60000);
-    if (new Date() > limite) {
-      alert("❌ Tiempo agotado para este partido.");
-      return;
-    }
+  // 2. Verificamos el tiempo (10 min antes)
+  const fechaP = new Date(`${partidoInfo.fecha_iso}T${partidoInfo.hora}:00`);
+  const limite = new Date(fechaP.getTime() - 10 * 60000);
+  
+  if (new Date() > limite) {
+    alert("❌ El tiempo para este partido expiró.");
+    return;
+  }
 
-    setLoading(partidoId);
-    const p = pronosticos[partidoId];
+  setLoading(partidoId);
+  const p = pronosticos[partidoId];
 
-    try {
-      const { error } = await supabase
-        .from('predicciones')
-        .upsert({
-          usuario_email: user.mail,
-          partido_id: partidoId,
-          goles_local: p?.goles_local || 0,
-          goles_visitante: p?.goles_visitante || 0,
-          jugador_partido: p?.jugador_partido || ''
-        }, { onConflict: 'usuario_email, partido_id' });
+  try {
+    // 3. El UPSERT: La clave está en el 'onConflict'
+    const { error } = await supabase
+      .from('predicciones')
+      .upsert({
+        usuario_email: user.mail,
+        partido_id: partidoId,
+        goles_local: p?.goles_local || 0,
+        goles_visitante: p?.goles_visitante || 0,
+        jugador_partido: p?.jugador_partido || ''
+      }, { 
+        // ESTO es lo que le dice a Supabase: "Si coinciden mail y partido, pisalo"
+        onConflict: 'usuario_email, partido_id' 
+      });
 
-      if (error) throw error;
-      alert(`✅ ¡Pronóstico confirmado!`);
-    } catch (err: any) {
-      alert("Error: " + err.message);
-    } finally {
-      setLoading(null);
-    }
-  };
+    if (error) throw error;
+    alert(`✅ Pronóstico guardado/actualizado correctamente.`);
+  } catch (err: any) {
+    alert("Error: " + err.message);
+  } finally {
+    setLoading(null);
+  }
+};
 
   if (!user) return <div className="p-8 text-white text-center italic">Validando credenciales...</div>;
 
