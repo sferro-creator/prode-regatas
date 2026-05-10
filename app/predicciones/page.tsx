@@ -243,11 +243,23 @@ export default function Predicciones() {
 
   return (
     <main className="flex min-h-screen flex-col items-center p-4 md:p-10 bg-[#001D4A] text-white font-sans">
+      return (    
+    {/* --- NUEVA UBICACIÓN DEL BOTÓN --- */}
+    <div className="w-full max-w-7xl flex justify-start mb-8">
+      <Link 
+        href="/" 
+        className="flex items-center gap-2 text-slate-400 hover:text-[#F6C83E] transition-colors text-[11px] uppercase font-black tracking-[0.2em] group"
+      >
+        <span className="text-xl group-hover:-translate-x-1 transition-transform">←</span> 
+        Volver al Inicio
+      </Link>
+    </div>
+
       <header className="w-full max-w-6xl text-center mb-10">
         <h1 className="text-4xl md:text-6xl font-black text-[#F6C83E] uppercase tracking-tighter mb-8 italic">FIXTURE MUNDIAL</h1>
         
-        <div className="flex overflow-x-auto pb-4 gap-2 no-scrollbar w-full max-w-4xl mx-auto">
-          {['grupos', '16avos', '8avos', 'cuartos', 'semis', 'final'].map((e) => (
+        <div className="flex flex-wrap justify-center gap-4 mb-8">
+            {['grupos', '16avos', '8avos', 'cuartos', 'semis', 'final'].map((e) => (
             <button
               key={e}
               onClick={() => setEtapaActiva(e)}
@@ -300,11 +312,16 @@ export default function Predicciones() {
 
                   return (
                     <div key={partido.id} className="bg-[#002B71] p-6 rounded-4xl border border-[#003C9E] shadow-2xl relative overflow-hidden group">
-                      <div className={`absolute top-0 right-8 px-4 py-1 rounded-b-xl text-[10px] font-black tracking-tighter ${bloqueado ? 'bg-red-600 text-white' : 'bg-[#F6C83E] text-[#001D4A]'}`}>
-                        {bloqueado ? "CERRADO" : partido.hora}
+                      {/* CARTEL DE ESTADO Y HORA MÁS GRANDE */}
+                      <div className={`absolute top-0 right-8 px-6 py-2 rounded-b-2xl text-sm font-black tracking-widest shadow-md ${
+                        bloqueado ? 'bg-red-600 text-white' : 'bg-[#F6C83E] text-[#001D4A]'
+                      }`}>
+                        {bloqueado ? "CERRADO" : `${partido.hora} HS`}
                       </div>
 
-                      <p className="text-[9px] text-slate-400 font-bold mb-6 tracking-widest uppercase">{partido.fecha}</p>
+                      <p className="text-sm text-slate-400 font-black mb-4 tracking-widest uppercase italic">
+                        {partido.fecha} 
+                      </p>
                       
                       <div className="flex justify-between items-center gap-2">
                         <div className="flex-1 text-center">
@@ -341,7 +358,7 @@ export default function Predicciones() {
                       </div>
 
                       <div className="mt-8 pt-6 border-t border-[#003C9E]/50">
-                        <label className="text-[9px] font-bold text-[#F6C83E] uppercase block mb-2 tracking-[0.2em] ml-1">🌟 MVP DEL PARTIDO</label>
+                        <label className="text-[10px] font-bold text-[#F6C83E] uppercase block mb-2 tracking-[0.2em] ml-1">🌟 MVP DEL PARTIDO</label>
                         <select 
                           disabled={bloqueado}
                           // USAMOS EL PLAN B: si no hay nada, que sea un string vacío ""
@@ -374,14 +391,6 @@ export default function Predicciones() {
           </section>
         ))}
       </div>
-
-      <Link 
-        href="/" 
-        className="flex items-center gap-2 text-slate-400 hover:text-[#F6C83E] ..."
-      >
-        <span className="text-lg">←</span> 
-        Volver al Inicio
-      </Link>
     </main>
   );
 }
