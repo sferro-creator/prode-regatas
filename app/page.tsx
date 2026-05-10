@@ -1,5 +1,5 @@
 'use client';
-import { supabase } from '../lib/supabase';
+import { supabase } from '@/lib/supabase';
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -14,7 +14,7 @@ export default function Home() {
   const [user, setUser] = useState<Usuario | null>(null);
   const [formData, setFormData] = useState<Usuario>({ nombre: '', email: '', telefono: '' });
   const [loading, setLoading] = useState(false);
-  const [isLogin, setIsLogin] = useState(true); // Nuevo: control de Login vs Registro
+  const [isLogin, setIsLogin] = useState(true);
 
   useEffect(() => {
     const savedUser = localStorage.getItem('prode_user');
@@ -33,7 +33,6 @@ export default function Home() {
     
     try {
       if (isLogin) {
-        // --- LÓGICA DE LOGIN (BUSCAR) ---
         const { data, error } = await supabase
           .from('usuarios')
           .select('*')
@@ -47,7 +46,6 @@ export default function Home() {
           setUser(data);
         }
       } else {
-        // --- LÓGICA DE REGISTRO (INSERTAR) ---
         const { data, error } = await supabase
           .from('usuarios')
           .insert([{ 
@@ -58,11 +56,10 @@ export default function Home() {
           .select();
 
         if (error) {
-          if (error.code === '23505') { // Error de email duplicado
+          if (error.code === '23505') {
             alert("Este email ya existe. ¡Iniciá sesión directamente!");
             setIsLogin(true);
           } else {
-            console.error("Error técnico:", error);
             alert(`Error: ${error.message}`);
           }
         } else if (data) {
@@ -158,11 +155,10 @@ export default function Home() {
           <p className="text-slate-400 text-sm italic">Cargá tus pronosticos para sumar puntos en la tabla general.</p>
         </Link>
         
-        {/* BOTÓN DE RANKING ACTIVADO */}
         <Link href="/ranking" className="p-10 bg-[#002B71] rounded-3xl border border-[#003C9E] hover:border-[#F6C83E] transition-all shadow-2xl group">
           <div className="text-6xl mb-6 text-center group-hover:scale-110 transition-transform">🏆</div>
           <h2 className="text-3xl font-bold mb-3 text-white">Ranking General</h2>
-          <p className="text-slate-400 text-sm">Mirá quién lidera la tabla y cómo vienen los puntos.</p>
+          <p className="text-slate-400 text-sm italic">Mirá quién lidera la tabla y cómo vienen los puntos.</p>
         </Link>
       </div>
 

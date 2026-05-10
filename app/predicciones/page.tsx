@@ -344,16 +344,14 @@ export default function Predicciones() {
                         <label className="text-[9px] font-bold text-[#F6C83E] uppercase block mb-2 tracking-[0.2em] ml-1">🌟 MVP DEL PARTIDO</label>
                         <select 
                           disabled={bloqueado}
-                          value={pronosticos[partido.id]?.jugador_partido ?? ""}
-                          className="w-full p-4 bg-[#001D4A] border border-[#003C9E] rounded-2xl text-sm outline-none focus:border-[#F6C83E] text-white appearance-none cursor-pointer disabled:opacity-50"
+                          // USAMOS EL PLAN B: si no hay nada, que sea un string vacío ""
+                          value={pronosticos[partido.id]?.jugador_partido ?? ""} 
+                          className="..."
                           onChange={(e) => handleChange(partido.id, 'jugador_partido', e.target.value)}
-                          defaultValue=""
                         >
-                          <option value="" disabled>Seleccioná al mejor jugador...</option>
-                          {partido.jugadores.map((jugador, idx) => (
-                            <option key={`${partido.id}-${idx}`} value={jugador} className="bg-[#002B71]">
-                              {jugador}
-                            </option>
+                          <option value="">Seleccionar MVP</option>
+                          {partido.jugadores.map(j => (
+                            <option key={j} value={j}>{j}</option>
                           ))}
                         </select>
                       </div>
@@ -377,8 +375,12 @@ export default function Predicciones() {
         ))}
       </div>
 
-      <Link href="/" className="my-20 text-slate-500 hover:text-[#F6C83E] transition-colors text-[10px] uppercase font-black tracking-widest border-b border-transparent hover:border-[#F6C83E]">
-        ← Volver al Panel Principal
+      <Link 
+        href="/" 
+        className="flex items-center gap-2 text-slate-400 hover:text-[#F6C83E] ..."
+      >
+        <span className="text-lg">←</span> 
+        Volver al Inicio
       </Link>
     </main>
   );

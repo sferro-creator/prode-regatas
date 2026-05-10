@@ -94,8 +94,12 @@ export default function Ranking() {
           Ir a mis predicciones
         </Link>
         
-        <Link href="/" className="text-slate-500 hover:text-[#F6C83E] transition-colors text-[10px] uppercase font-black tracking-widest">
-          ← Volver al Inicio
+        <Link 
+          href="/" 
+          className="flex items-center gap-2 text-slate-400 hover:text-[#F6C83E] ..."
+        >
+          <span className="text-lg">←</span> 
+           Volver al Inicio
         </Link>
       </div>
     </main>
