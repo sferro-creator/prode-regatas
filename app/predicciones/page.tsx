@@ -36,7 +36,7 @@ const ModalComparador = ({ partido, onClose }: { partido: any, onClose: () => vo
       // Traemos los nombres de todos los emails encontrados
       const emails = predicciones?.map(p => p.usuario_email) || [];
       const { data: perfiles } = await supabase
-        .from('perfiles')
+        .from('usuarios')
         .select('email, nombre')
         .in('email', emails);
 
