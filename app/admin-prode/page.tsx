@@ -122,6 +122,25 @@ export default function AdminPanel() {
   const [loading, setLoading] = useState<string | null>(null);
   const [resultados, setResultados] = useState<any>({});
 
+  useEffect(() => {
+    const cargarDatosExistentes = async () => {
+      const { data, error } = await supabase.from('resultados_reales').select('*');
+      if (data && !error) {
+        // Transformamos el array de la base en el objeto que usa el estado
+        const inicial: any = {};
+        data.forEach(res => {
+          inicial[res.partido_id] = {
+            goles_local: res.goles_local_real,
+            goles_visitante: res.goles_visitante_real,
+            mvp: res.mvp_real
+          };
+        });
+        setResultados(inicial);
+      }
+    };
+    cargarDatosExistentes();
+  }, []);
+
   const handleChange = (partidoId: string, campo: string, valor: any) => {
     setResultados({
       ...resultados,
@@ -170,22 +189,25 @@ export default function AdminPanel() {
                 {p.local} vs {p.visitante}
               </div>
 
-              <div className="flex gap-4 items-center">
+             <div className="flex gap-4 items-center">
                 <input 
                   type="number" placeholder="L" 
-                  className="w-14 h-14 bg-[#001D4A] border border-[#003C9E] rounded-xl text-center font-black text-xl text-[#F6C83E]"
+                  value={resultados[p.id]?.goles_local || ''}
+                  className="w-14 h-14 bg-[#001D4A] border border-[#003C9E] rounded-xl text-center font-black text-xl text-[#F6C83E] outline-none focus:border-[#F6C83E]"
                   onChange={(e) => handleChange(p.id, 'goles_local', e.target.value)}
                 />
-                <span className="text-slate-500">-</span>
+                <span className="text-slate-500 font-bold">VS</span>
                 <input 
                   type="number" placeholder="V" 
-                  className="w-14 h-14 bg-[#001D4A] border border-[#003C9E] rounded-xl text-center font-black text-xl text-[#F6C83E]"
+                  value={resultados[p.id]?.goles_visitante || ''}
+                  className="w-14 h-14 bg-[#001D4A] border border-[#003C9E] rounded-xl text-center font-black text-xl text-[#F6C83E] outline-none focus:border-[#F6C83E]"
                   onChange={(e) => handleChange(p.id, 'goles_visitante', e.target.value)}
                 />
               </div>
 
               <select 
-                className="bg-[#001D4A] border border-[#003C9E] p-3 rounded-xl text-sm font-bold flex-1"
+                value={resultados[p.id]?.mvp || ''}
+                className="bg-[#001D4A] border border-[#003C9E] p-3 rounded-xl text-sm font-bold flex-1 text-white outline-none focus:border-[#F6C83E]"
                 onChange={(e) => handleChange(p.id, 'mvp', e.target.value)}
               >
                 <option value="">MVP Oficial</option>
