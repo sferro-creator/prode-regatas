@@ -47,16 +47,15 @@ const ModalComparador = ({ partido, onClose }: { partido: any, onClose: () => vo
         </div>
         
         <div className="space-y-3">
-          {votos.map((v, i) => (
-            <div key={i} className="flex justify-between bg-[#001D4A] p-3 rounded-xl text-xs">
-              <span className="font-bold text-slate-300">
-                {v.perfiles?.nombre || v.usuario_email.split('@')[0]}
-              </span>
-              <span className="font-black text-[#F6C83E]">
-                {v.goles_local} - {v.goles_visitante}
-              </span>
-            </div>
-          ))}
+         {votos.map((v, i) => (
+          <div key={i} className="...">
+            <span className="font-bold">
+              {/* Así accedemos al nombre que trajimos de la otra tabla */}
+              {v.perfiles?.nombre || v.usuario_email}
+            </span>
+            <span>{v.goles_local} - {v.goles_visitante}</span>
+          </div>
+        ))}
         </div>
       </div>
     </div>
