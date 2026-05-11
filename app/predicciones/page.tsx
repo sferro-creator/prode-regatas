@@ -23,24 +23,23 @@ const ModalComparador = ({ partido, onClose }: { partido: any, onClose: () => vo
 
   useEffect(() => {
     // Al abrirse, llama al "Puente" que creamos recién
-    const cargar = async () => {
-      const { data, error } = await supabase
-        .from('predicciones')
-        .select(`
-          goles_local,
-          goles_visitante,
-          usuario_email,
-          perfiles!usuario_email (
-            nombre
-          )
-        `) // El "!" le dice que use esa columna específica para la relación
-        .eq('partido_id', partido.id);
+      const cargar = async () => {
+        const { data, error } = await supabase
+          .from('predicciones')
+          .select(`
+            goles_local,
+            goles_visitante,
+            usuario_email,
+            jugador_partido,
+            perfiles!usuario_email ( 
+              nombre
+            )
+          `) // Cambié usuario_Id por usuario_email para que coincida con tu tabla
+          .eq('partido_id', Number(partido.id));
 
-      if (error) {
-        console.error("Error Supabase:", error);
-      }
-      setVotos(data || []);
-    };
+        if (error) console.error("Error Supabase:", error);
+        setVotos(data || []);
+      };
     cargar();
   }, [partido.id]);
 
