@@ -170,7 +170,7 @@ export default function Predicciones() {
     const parsedUser = JSON.parse(savedUser);
     setUser(parsedUser);
     // Cargamos los datos de la base de datos automáticamente
-    cargarMisPredicciones(parsedUser.mail);
+    cargarMisPredicciones(parsedUser.mail || parsedUser.email);
   }
 }, []);
 
@@ -199,7 +199,7 @@ export default function Predicciones() {
     return;
   }
 
-  if (!user || !user.mail) {
+  if (!user || !user.email) {
     alert("❌ Error: No se detectó tu sesión. Por favor, volvé a ingresar.");
     return;
   }
@@ -212,7 +212,7 @@ export default function Predicciones() {
     const { error } = await supabase
       .from('predicciones')
       .upsert({
-        usuario_email: user.mail,
+        usuario_email: user.mail || user.email,
         partido_id: partidoId,
         goles_local: p?.goles_local || 0,
         goles_visitante: p?.goles_visitante || 0,
