@@ -18,7 +18,48 @@ interface Partido {
   jugadores: string[];
 }
 
+const ModalComparador = ({ partido, onClose }: { partido: any, onClose: () => void }) => {
+  const [votos, setVotos] = useState<any[]>([]);
+
+  useEffect(() => {
+    // Al abrirse, llama al "Puente" que creamos recién
+    const cargar = async () => {
+      const { data } = await supabase
+        .from('predicciones')
+        .select('*, perfiles(nombre)')
+        .eq('partido_id', partido.id);
+      setVotos(data || []);
+    };
+    cargar();
+  }, [partido.id]);
+
+  return (
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+      <div className="bg-[#002B71] p-6 rounded-3xl w-full max-w-md border border-[#F6C83E]">
+        <div className="flex justify-between mb-4">
+          <h3 className="font-black text-[#F6C83E] uppercase italic">¿Qué votaron las demás?</h3>
+          <button onClick={onClose} className="text-white">✕</button>
+        </div>
+        
+        <div className="space-y-3">
+          {votos.map((v, i) => (
+            <div key={i} className="flex justify-between bg-[#001D4A] p-3 rounded-xl text-xs">
+              <span className="font-bold text-slate-300">
+                {v.perfiles?.nombre || v.usuario_email.split('@')[0]}
+              </span>
+              <span className="font-black text-[#F6C83E]">
+                {v.goles_local} - {v.goles_visitante}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function Predicciones() {
+  const [partidoParaComparar, setPartidoParaComparar] = useState<any>(null);
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState<string | null>(null);
   const [pronosticos, setPronosticos] = useState<any>({});
@@ -389,6 +430,23 @@ export default function Predicciones() {
                       >
                         {bloqueado ? "PERIODO FINALIZADO" : loading === partido.id ? "ENVIANDO..." : "CONFIRMAR PRONÓSTICO"}
                       </button>
+                      {/* Esto va justo abajo del botón de confirmar */}
+                      {bloqueado && (
+                        <button 
+                          onClick={() => setPartidoParaComparar(partido)}
+                          className="w-full mt-2 py-2 border border-slate-500 rounded-xl text-[10px] font-bold text-slate-400 hover:text-[#F6C83E]"
+                        >
+                          🔍 COMPARAR PREDICCIONES
+                        </button>
+                      )}
+
+                      {/* Y esto ponelo al final de todo el return, antes del último </main> */}
+                      {partidoParaComparar && (
+                        <ModalComparador 
+                          partido={partidoParaComparar} 
+                          onClose={() => setPartidoParaComparar(null)} 
+                        />
+                      )}
                     </div>
                   );
                 })}
