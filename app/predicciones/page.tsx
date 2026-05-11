@@ -223,8 +223,10 @@ export default function Predicciones() {
       });
 
     if (error) throw error;
-    alert(`✅ Pronóstico para ${partidoInfo.local} vs ${partidoInfo.visitante} guardado correctamente.`);  } catch (err: any) {
-    alert("Error: " + err.message);
+    alert(`✅ Pronóstico para ${partidoInfo.local} vs ${partidoInfo.visitante} guardado correctamente.`);  
+  } catch (err: any) {
+    console.error("Error al guardar predicción:", err);
+    alert(`❌ Error al guardar: ${err.message || 'Intenta nuevamente.'}`);
   } finally {
     setLoading(null);
   }
