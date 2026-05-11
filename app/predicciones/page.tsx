@@ -52,19 +52,40 @@ const ModalComparador = ({ partido, onClose }: { partido: any, onClose: () => vo
           <button onClick={onClose} className="text-white">✕</button>
         </div>
         
-        <div className="space-y-3">
-         {votos.map((v, i) => (
-          <div key={i} className="...">
-            <span className="font-bold">
-              {/* Importante: Accedemos a perfiles (en plural) que es el objeto que devuelve Supabase */}
-              {v.perfiles?.nombre || v.usuario_email}
-            </span>
-            <span>{v.goles_local} - {v.goles_visitante}</span>
+        <div className="space-y-4 mt-4">
+            {votos.length > 0 ? (
+              votos.map((v, i) => (
+                <div 
+                  key={i} 
+                  className="flex items-center justify-between bg-[#001D4A] p-4 rounded-2xl border border-[#003C9E]/50 shadow-inner"
+                >
+                  {/* Lado Izquierdo: Nombre de la jugadora */}
+                  <div className="flex flex-col">
+                    <span className="text-[10px] text-[#F6C83E] font-black uppercase tracking-widest mb-0.5">
+                      JUGADORA
+                    </span>
+                    <span className="font-bold text-white text-sm uppercase tracking-tight">
+                      {v.perfiles?.nombre || v.usuario_email.split('@')[0]}
+                    </span>
+                      {v.jugador_partido && <span className="text-[9px] text-slate-400 mt-1 italic">🌟 {v.jugador_partido}</span>}
+                  </div>
+
+                  {/* Lado Derecho: Resultado destacado */}
+                  <div className="flex items-center gap-3 bg-[#002B71] px-4 py-2 rounded-xl border border-[#003C9E]">
+                    <span className="text-xl font-black text-[#F6C83E]">{v.goles_local}</span>
+                    <span className="text-[10px] font-black text-slate-500 italic">VS</span>
+                    <span className="text-xl font-black text-[#F6C83E]">{v.goles_visitante}</span>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="text-center text-slate-500 py-10 italic text-sm">
+                Aún no hay predicciones para este partido.
+              </p>
+            )}
           </div>
-        ))}
         </div>
       </div>
-    </div>
   );
 };
 
