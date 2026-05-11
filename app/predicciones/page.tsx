@@ -74,7 +74,7 @@ const ModalComparador = ({ partido, onClose }: { partido: any, onClose: () => vo
                       JUGADOR
                     </span>
                     <span className="font-bold text-white text-sm uppercase tracking-tight">
-                      {v.perfiles?.nombre || v.usuario_email.split('@')[0]}
+                      {v.nombre}
                     </span>
                       {v.jugador_partido && <span className="text-[9px] text-slate-400 mt-1 italic">🌟 {v.jugador_partido}</span>}
                   </div>
