@@ -26,15 +26,7 @@ const ModalComparador = ({ partido, onClose }: { partido: any, onClose: () => vo
       const cargar = async () => {
         const { data, error } = await supabase
           .from('predicciones')
-          .select(`
-            goles_local,
-            goles_visitante,
-            usuario_email,
-            jugador_partido,
-            perfiles!usuario_email ( 
-              nombre
-            )
-          `) // Cambié usuario_Id por usuario_email para que coincida con tu tabla
+          .select('goles_local, goles_visitante, usuario_email, jugador_partido')
           .eq('partido_id', Number(partido.id));
 
         if (error) console.error("Error Supabase:", error);
