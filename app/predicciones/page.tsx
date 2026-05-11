@@ -127,10 +127,10 @@ export default function Predicciones() {
     { id: '2007', etapa: '8avos', local: '1013', bandera_local: '🏳️', visitante: '1014', bandera_visitante: '🏳️', fecha: '7 de Julio', fecha_iso: '2026-07-07', hora: '13:00', jugadores: [] },  
     { id: '2008', etapa: '8avos', local: '1015', bandera_local: '🏳️', visitante: '1016', bandera_visitante: '🏳️', fecha: '7 de Julio', fecha_iso: '2026-07-07', hora: '17:00', jugadores: [] },  
 
-    { id: '3001', etapa: '4avos', local: '2001', bandera_local: '🏳️', visitante: '2002', bandera_visitante: '🏳️', fecha: '9 de Julio', fecha_iso: '2026-07-09', hora: '17:00', jugadores: [] },  
-    { id: '3002', etapa: '4avos', local: '2003', bandera_local: '🏳️', visitante: '2004', bandera_visitante: '🏳️', fecha: '10 de Julio', fecha_iso: '2026-07-10', hora: '16:00', jugadores: [] },  
-    { id: '3003', etapa: '4avos', local: '2005', bandera_local: '🏳️', visitante: '2006', bandera_visitante: '🏳️', fecha: '11 de Julio', fecha_iso: '2026-07-11', hora: '18:00', jugadores: [] },  
-    { id: '3004', etapa: '4avos', local: '2007', bandera_local: '🏳️', visitante: '2008', bandera_visitante: '🏳️', fecha: '11 de Julio', fecha_iso: '2026-07-11', hora: '22:00', jugadores: [] },  
+    { id: '3001', etapa: 'cuartos', local: '2001', bandera_local: '🏳️', visitante: '2002', bandera_visitante: '🏳️', fecha: '9 de Julio', fecha_iso: '2026-07-09', hora: '17:00', jugadores: [] },  
+    { id: '3002', etapa: 'cuartos', local: '2003', bandera_local: '🏳️', visitante: '2004', bandera_visitante: '🏳️', fecha: '10 de Julio', fecha_iso: '2026-07-10', hora: '16:00', jugadores: [] },  
+    { id: '3003', etapa: 'cuartos', local: '2005', bandera_local: '🏳️', visitante: '2006', bandera_visitante: '🏳️', fecha: '11 de Julio', fecha_iso: '2026-07-11', hora: '18:00', jugadores: [] },  
+    { id: '3004', etapa: 'cuartos', local: '2007', bandera_local: '🏳️', visitante: '2008', bandera_visitante: '🏳️', fecha: '11 de Julio', fecha_iso: '2026-07-11', hora: '22:00', jugadores: [] },  
 
     { id: '4001', etapa: 'semis', local: '3001', bandera_local: '🏳️', visitante: '3002', bandera_visitante: '🏳️', fecha: '14 de Julio', fecha_iso: '2026-07-14', hora: '16:00', jugadores: [] },  
     { id: '4002', etapa: 'semis', local: '3003', bandera_local: '🏳️', visitante: '3004', bandera_visitante: '🏳️', fecha: '15 de Julio', fecha_iso: '2026-07-15', hora: '16:00', jugadores: [] },  
