@@ -20,18 +20,36 @@ interface Partido {
 
 const ModalComparador = ({ partido, onClose }: { partido: any, onClose: () => void }) => {
   const [votos, setVotos] = useState<any[]>([]);
-
+  const [cargando, setCargando] = useState(true); // ← agregá esta línea
+  
   useEffect(() => {
-    // Al abrirse, llama al "Puente" que creamos recién
-      const cargar = async () => {
-        const { data, error } = await supabase
-          .from('predicciones')
-          .select('goles_local, goles_visitante, usuario_email, jugador_partido')
-          .eq('partido_id', Number(partido.id));
+    const cargar = async () => {
+      setCargando(true);
 
-        if (error) console.error("Error Supabase:", error);
-        setVotos(data || []);
-      };
+      const { data: predicciones, error } = await supabase
+        .from('predicciones')
+        .select('goles_local, goles_visitante, usuario_email, jugador_partido')
+        .eq('partido_id', partido.id);
+
+      if (error) { console.error(error); setCargando(false); return; }
+
+      // Traemos los nombres de todos los emails encontrados
+      const emails = predicciones?.map(p => p.usuario_email) || [];
+      const { data: perfiles } = await supabase
+        .from('perfiles')
+        .select('usuario_email, nombre')
+        .in('usuario_email', emails);
+
+      // Combinamos
+      const votosConNombre = predicciones?.map(p => ({
+        ...p,
+        nombre: perfiles?.find(perf => perf.usuario_email === p.usuario_email)?.nombre 
+                || p.usuario_email.split('@')[0]
+      })) || [];
+
+      setVotos(votosConNombre);
+      setCargando(false);
+    };
     cargar();
   }, [partido.id]);
 
@@ -50,10 +68,10 @@ const ModalComparador = ({ partido, onClose }: { partido: any, onClose: () => vo
                   key={i} 
                   className="flex items-center justify-between bg-[#001D4A] p-4 rounded-2xl border border-[#003C9E]/50 shadow-inner"
                 >
-                  {/* Lado Izquierdo: Nombre de la jugadora */}
+                  {/* Lado Izquierdo: Nombre del jugador */}
                   <div className="flex flex-col">
                     <span className="text-[10px] text-[#F6C83E] font-black uppercase tracking-widest mb-0.5">
-                      JUGADORA
+                      JUGADOR
                     </span>
                     <span className="font-bold text-white text-sm uppercase tracking-tight">
                       {v.perfiles?.nombre || v.usuario_email.split('@')[0]}
