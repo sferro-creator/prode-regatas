@@ -37,13 +37,13 @@ const ModalComparador = ({ partido, onClose }: { partido: any, onClose: () => vo
       const emails = predicciones?.map(p => p.usuario_email) || [];
       const { data: perfiles } = await supabase
         .from('perfiles')
-        .select('usuario_email, nombre')
-        .in('usuario_email', emails);
+        .select('email, nombre')
+        .in('email', emails);
 
       // Combinamos
       const votosConNombre = predicciones?.map(p => ({
         ...p,
-        nombre: perfiles?.find(perf => perf.usuario_email === p.usuario_email)?.nombre 
+        nombre: perfiles?.find(perf => perf.email === p.usuario_email)?.nombre 
                 || p.usuario_email.split('@')[0]
       })) || [];
 
