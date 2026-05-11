@@ -24,10 +24,15 @@ const ModalComparador = ({ partido, onClose }: { partido: any, onClose: () => vo
   useEffect(() => {
     // Al abrirse, llama al "Puente" que creamos recién
     const cargar = async () => {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('predicciones')
-        .select('*, perfiles(nombre)')
-        .eq('partido_id', partido.id);
+        .select(`
+         *,
+        perfiles:usuario_email (
+          nombre
+        )
+      `)
+      .eq('partido_id', partido.id);
       setVotos(data || []);
     };
     cargar();
@@ -67,7 +72,7 @@ export default function Predicciones() {
   const [faseGruposActiva, setFaseGruposActiva] = useState(1);
 
   const fixture: Partido[] = [
-    { id: '1', etapa: 'grupos', fase_nro: 1, grupo: 'GRUPO A', local: 'MÉXICO', bandera_local: '🇲🇽', visitante: 'SUDÁFRICA', bandera_visitante: '🇿🇦', fecha: '11 de Junio', fecha_iso: '2026-05-11', hora: '17:30', jugadores: ['Guillermo Ochoa', 'Luis Malagón', 'Julio González', 'Edson Álvarez', 'César Montes', 'Johan Vásquez', 'Jorge Sánchez', 'Gerardo Arteaga', 'Israel Reyes', 'Jesús Orozco Chiquete', 'Luis Chávez', 'Orbelín Pineda', 'Erik Sánchez', 'Marcel Ruiz', 'Roberto Alvarado', 'Luis Romo', 'Santiago Giménez', 'Hirving Lozano', 'Julián Quiñones', 'Henry Martín', 'Alexis Vega', 'Uriel Antuna', 'Ronwen Williams', 'Khuliso Mudau', 'Aubrey Modiba', 'Mothobi Mvala', 'Grant Kekana', 'Teboho Mokoena', 'Sphephelo Sithole', 'Themba Zwane', 'Percy Tau', 'Evidence Makgopa', 'Thapelo Morena'] },
+    { id: '1', etapa: 'grupos', fase_nro: 1, grupo: 'GRUPO A', local: 'MÉXICO', bandera_local: '🇲🇽', visitante: 'SUDÁFRICA', bandera_visitante: '🇿🇦', fecha: '11 de Junio', fecha_iso: '2026-05-11', hora: '17:00', jugadores: ['Guillermo Ochoa', 'Luis Malagón', 'Julio González', 'Edson Álvarez', 'César Montes', 'Johan Vásquez', 'Jorge Sánchez', 'Gerardo Arteaga', 'Israel Reyes', 'Jesús Orozco Chiquete', 'Luis Chávez', 'Orbelín Pineda', 'Erik Sánchez', 'Marcel Ruiz', 'Roberto Alvarado', 'Luis Romo', 'Santiago Giménez', 'Hirving Lozano', 'Julián Quiñones', 'Henry Martín', 'Alexis Vega', 'Uriel Antuna', 'Ronwen Williams', 'Khuliso Mudau', 'Aubrey Modiba', 'Mothobi Mvala', 'Grant Kekana', 'Teboho Mokoena', 'Sphephelo Sithole', 'Themba Zwane', 'Percy Tau', 'Evidence Makgopa', 'Thapelo Morena'] },
     { id: '2', etapa: 'grupos', fase_nro: 1, grupo: 'GRUPO A', local: 'COREA DEL SUR', bandera_local: '🇰🇷', visitante: 'REP. CHECA', bandera_visitante: '🇨🇿', fecha: '11 de Junio', fecha_iso: '2026-06-11', hora: '23:00', jugadores: ['Heung-min Son', 'Kim Min-jae', 'Lee Kang-in', 'Hwang Hee-chan', 'Cho Gue-sung', 'Hwang In-beom', 'Jo Hyeon-woo', 'Lee Jae-sung', 'Paik Seung-ho', 'Jeong Woo-yeong', 'Hong Hyun-seok', 'Oh Hyeon-gyu', 'Yang Min-hyeok', 'Seol Young-woo', 'Kim Jin-su', 'Kim Seung-gyu', 'Patrik Schick', 'Tomáš Souček', 'Vladimir Coufal', 'Adam Hložek', 'Antonín Barák', 'Ladislav Krejčí', 'Václav Cerny', 'David Zima', 'Robin Hranáč', 'David Jurásek', 'Lukáš Provod', 'Ondřej Lingr', 'Pavel Sulc', 'Jan Kuchta', 'Mojmír Chytil'] },
     { id: '3', etapa: 'grupos', fase_nro: 1, grupo: 'GRUPO B', local: 'CANADÁ', bandera_local: '🇨🇦', visitante: 'BOSNIA Y HERZEGOVINA', bandera_visitante: '🇧🇦', fecha: '12 de Junio', fecha_iso: '2026-06-12', hora: '16:00', jugadores: ['Alphonso Davies', 'Jonathan David', 'Stephen Eustáquio', 'Tajon Buchanan', 'Cyle Larin', 'Ismael Koné', 'Alistair Johnston', 'Milan Borjan', 'Jacob Shaffelburg', 'Edin Džeko', 'Sead Kolašinac', 'Ermedin Demirovic', 'Amar Dedic', 'Benjamín Tahirovic', 'Rade Krunic', 'Anel Ahmedhodžic', 'Kenan Piric', 'Haris Hajradinovic'] },
     { id: '4', etapa: 'grupos', fase_nro: 1, grupo: 'GRUPO D', local: 'ESTADOS UNIDOS', bandera_local: '🇺🇸', visitante: 'PARAGUAY', bandera_visitante: '🇵🇾', fecha: '12 de Junio', fecha_iso: '2026-06-12', hora: '22:00', jugadores: ['Christian Pulisic', 'Weston McKennie', 'Timothy Weah', 'Folarin Balogun', 'Giovanni Reyna', 'Matt Turner', 'Antonee Robinson', 'Yunus Musah', 'Tyler Adams', 'Brenden Aaronson', 'Ricardo Pepi', 'Cameron Carter-Vickers', 'Miguel Almirón', 'Julio Enciso', 'Gustavo Gómez', 'Ramón Sosa', 'Mathías Villasanti', 'Adam Bareiro', 'Omar Alderete', 'Antonio Sanabria', 'Andrés Cubas', 'Junior Alonso', 'Santiago Arzamendia', 'Alejandro Romero Gamarra'] },
