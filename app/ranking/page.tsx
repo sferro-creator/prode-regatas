@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 interface FilaRanking {
+  nombre: string;
   usuario_email: string;
   total_puntos: number;
 }
@@ -47,7 +48,7 @@ export default function Ranking() {
           <thead>
             <tr className="bg-[#003C9E]/50 border-b border-[#003C9E]">
               <th className="p-6 text-[#F6C83E] font-black text-[10px] uppercase tracking-widest">Puesto</th>
-              <th className="p-6 text-[#F6C83E] font-black text-[10px] uppercase tracking-widest">Jugadora</th>
+              <th className="p-6 text-[#F6C83E] font-black text-[10px] uppercase tracking-widest">Jugador</th>
               <th className="p-6 text-[#F6C83E] font-black text-[10px] uppercase tracking-widest text-right">Puntos</th>
             </tr>
           </thead>
@@ -67,13 +68,15 @@ export default function Ranking() {
                     {index + 1}°
                   </td>
                   <td className="p-6">
-                    <p className="font-bold text-sm text-white lowercase">
-                      {fila.usuario_email.split('@')[0]}
-                    </p>
-                    <p className="text-[9px] text-slate-500 uppercase font-bold tracking-tighter">
-                      {fila.usuario_email}
-                    </p>
-                  </td>
+                        {/* Mostramos el nombre real bien grande */}
+                        <p className="font-bold text-base text-white uppercase tracking-tight">
+                            {fila.nombre}
+                        </p>
+                        {/* Dejamos el email chiquito abajo por las dudas */}
+                        <p className="text-[10px] text-slate-500 font-medium lowercase italic">
+                            {fila.usuario_email}
+                        </p>
+                    </td>
                   <td className="p-6 text-right">
                     <span className="bg-[#F6C83E] text-[#001D4A] px-4 py-2 rounded-xl font-black text-lg">
                       {fila.total_puntos}
