@@ -199,6 +199,11 @@ export default function Predicciones() {
     return;
   }
 
+  if (!user || !user.mail) {
+    alert("❌ Error: No se detectó tu sesión. Por favor, volvé a ingresar.");
+    return;
+  }
+
   setLoading(partidoId);
   const p = pronosticos[partidoId];
 
@@ -218,8 +223,7 @@ export default function Predicciones() {
       });
 
     if (error) throw error;
-    alert(`✅ Pronóstico guardado/actualizado correctamente.`);
-  } catch (err: any) {
+    alert(`✅ Pronóstico para ${partidoInfo.local} vs ${partidoInfo.visitante} guardado correctamente.`);  } catch (err: any) {
     alert("Error: " + err.message);
   } finally {
     setLoading(null);
