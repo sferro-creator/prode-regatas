@@ -68,15 +68,11 @@ export default function Ranking() {
                     {index + 1}°
                   </td>
                   <td className="p-6">
-                        {/* Mostramos el nombre real bien grande */}
-                        <p className="font-bold text-base text-white uppercase tracking-tight">
-                            {fila.nombre}
-                        </p>
-                        {/* Dejamos el email chiquito abajo por las dudas */}
-                        <p className="text-[10px] text-slate-500 font-medium lowercase italic">
-                            {fila.usuario_email}
-                        </p>
-                    </td>
+                      {/* Mostramos el nombre real bien grande */}
+                    <p className="font-bold text-base text-white uppercase tracking-tight">
+                      {fila.nombre || fila.usuario_email.split('@')[0]} {/* Si no hay nombre, mostramos el email sin dominio */ }
+                    </p>
+                  </td>
                   <td className="p-6 text-right">
                     <span className="bg-[#F6C83E] text-[#001D4A] px-4 py-2 rounded-xl font-black text-lg">
                       {fila.total_puntos}
