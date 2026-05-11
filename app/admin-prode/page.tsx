@@ -3,7 +3,7 @@ import { supabase } from '@/lib/supabase';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 
-// Usamos el mismo fixture que tenés en predicciones (copia los partidos aquí)
+// Asegurate de que este fixture sea igual al de predicciones
 const fixture = [
   { id: '1', etapa: 'grupos', fase_nro: 1, grupo: 'GRUPO A', local: 'MÉXICO', bandera_local: '🇲🇽', visitante: 'SUDÁFRICA', bandera_visitante: '🇿🇦', fecha: '11 de Junio', fecha_iso: '2026-06-11', hora: '16:00', jugadores: ['Guillermo Ochoa', 'Edson Álvarez', 'Percy Tau'] },
     { id: '2', etapa: 'grupos', fase_nro: 1, grupo: 'GRUPO A', local: 'COREA DEL SUR', bandera_local: '🇰🇷', visitante: 'REP. CHECA', bandera_visitante: '🇨🇿', fecha: '11 de Junio', fecha_iso: '2026-06-11', hora: '23:00', jugadores: ['Heung-min Son', 'Kim Min-jae', 'Patrik Schick'] },
@@ -122,17 +122,17 @@ export default function AdminPanel() {
   const [loading, setLoading] = useState<string | null>(null);
   const [resultados, setResultados] = useState<any>({});
 
+  // 1. Cargar datos existentes al entrar
   useEffect(() => {
     const cargarDatosExistentes = async () => {
       const { data, error } = await supabase.from('resultados_reales').select('*');
       if (data && !error) {
-        // Transformamos el array de la base en el objeto que usa el estado
         const inicial: any = {};
         data.forEach(res => {
           inicial[res.partido_id] = {
-            goles_local: res.goles_local_real,
-            goles_visitante: res.goles_visitante_real,
-            mvp: res.mvp_real
+            goles_local: res.goles_local_real?.toString() || '',
+            goles_visitante: res.goles_visitante_real?.toString() || '',
+            mvp: res.mvp_real || ''
           };
         });
         setResultados(inicial);
@@ -144,7 +144,10 @@ export default function AdminPanel() {
   const handleChange = (partidoId: string, campo: string, valor: any) => {
     setResultados({
       ...resultados,
-      [partidoId]: { ...resultados[partidoId], [campo]: valor }
+      [partidoId]: { 
+        ...resultados[partidoId], 
+        [campo]: valor 
+      }
     });
   };
 
@@ -157,9 +160,9 @@ export default function AdminPanel() {
         .from('resultados_reales')
         .upsert({
           partido_id: partidoId,
-          goles_local_real: parseInt(res.goles_local) || 0,
-          goles_visitante_real: parseInt(res.goles_visitante) || 0,
-          mvp_real: res.mvp || ''
+          goles_local_real: parseInt(res?.goles_local) || 0,
+          goles_visitante_real: parseInt(res?.goles_visitante) || 0,
+          mvp_real: res?.mvp || ''
         }, { onConflict: 'partido_id' });
 
       if (error) throw error;
@@ -174,50 +177,56 @@ export default function AdminPanel() {
   return (
     <main className="min-h-screen p-8 bg-[#001D4A] text-white">
       <div className="max-w-4xl mx-auto">
-        <Link href="/" className="text-[#F6C83E] font-bold uppercase text-xs tracking-widest hover:underline">
-          ← Volver al inicio
-        </Link>
+        <div className="w-full flex justify-start mb-8">
+          <Link href="/" className="text-[#F6C83E] font-bold uppercase text-[10px] tracking-widest hover:underline">
+            ← Volver al inicio
+          </Link>
+        </div>
         
-        <h1 className="text-4xl font-black my-8 text-[#F6C83E] italic uppercase">Panel de Control</h1>
-        <p className="mb-12 text-slate-400 font-medium">Cargá los resultados oficiales para calcular los puntos de todas las jugadoras.</p>
+        <h1 className="text-4xl font-black my-8 text-[#F6C83E] italic uppercase tracking-tighter">Panel de Control</h1>
+        <p className="mb-12 text-slate-400 font-medium">Cargá los resultados oficiales para actualizar el Prode.</p>
 
         <div className="space-y-6">
           {fixture.map((p) => (
             <div key={p.id} className="bg-[#002B71] p-6 rounded-3xl border border-[#003C9E] flex flex-col md:flex-row items-center gap-6">
               <div className="flex-1 font-bold">
-                <span className="text-[#F6C83E] block text-[10px] mb-1">PARTIDO #{p.id}</span>
-                {p.local} vs {p.visitante}
+                <span className="text-[#F6C83E] block text-[10px] mb-1 text-left uppercase tracking-widest">PARTIDO #{p.id}</span>
+                <div className="text-left text-lg italic">{p.local} vs {p.visitante}</div>
               </div>
 
-             <div className="flex gap-4 items-center">
+              <div className="flex gap-4 items-center">
                 <input 
-                  type="number" placeholder="L" 
-                  value={resultados[p.id]?.goles_local || ''}
+                  type="number" 
+                  placeholder="L" 
+                  value={resultados[p.id]?.goles_local ?? ''} 
                   className="w-14 h-14 bg-[#001D4A] border border-[#003C9E] rounded-xl text-center font-black text-xl text-[#F6C83E] outline-none focus:border-[#F6C83E]"
                   onChange={(e) => handleChange(p.id, 'goles_local', e.target.value)}
                 />
-                <span className="text-slate-500 font-bold">VS</span>
+                <span className="text-slate-500 font-black italic">VS</span>
                 <input 
-                  type="number" placeholder="V" 
-                  value={resultados[p.id]?.goles_visitante || ''}
+                  type="number" 
+                  placeholder="V" 
+                  value={resultados[p.id]?.goles_visitante ?? ''} 
                   className="w-14 h-14 bg-[#001D4A] border border-[#003C9E] rounded-xl text-center font-black text-xl text-[#F6C83E] outline-none focus:border-[#F6C83E]"
                   onChange={(e) => handleChange(p.id, 'goles_visitante', e.target.value)}
                 />
               </div>
 
               <select 
-                value={resultados[p.id]?.mvp || ''}
+                value={resultados[p.id]?.mvp ?? ''}
                 className="bg-[#001D4A] border border-[#003C9E] p-3 rounded-xl text-sm font-bold flex-1 text-white outline-none focus:border-[#F6C83E]"
                 onChange={(e) => handleChange(p.id, 'mvp', e.target.value)}
               >
                 <option value="">MVP Oficial</option>
-                {p.jugadores.map(j => <option key={j} value={j}>{j}</option>)}
+                {p.jugadores.map(j => (
+                  <option key={j} value={j}>{j}</option>
+                ))}
               </select>
 
               <button 
                 onClick={() => guardarResultadoOficial(p.id)}
                 disabled={loading === p.id}
-                className="bg-[#F6C83E] text-[#001D4A] px-6 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:brightness-110 disabled:opacity-50"
+                className="bg-[#F6C83E] text-[#001D4A] px-6 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:brightness-110 disabled:opacity-50 transition-all shadow-lg active:scale-95"
               >
                 {loading === p.id ? "GUARDANDO..." : "CARGAR"}
               </button>
