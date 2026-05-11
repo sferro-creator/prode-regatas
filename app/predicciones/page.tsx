@@ -27,12 +27,18 @@ const ModalComparador = ({ partido, onClose }: { partido: any, onClose: () => vo
       const { data, error } = await supabase
         .from('predicciones')
         .select(`
-         *,
-        perfiles:usuario_email (
-          nombre
-        )
-      `)
-      .eq('partido_id', partido.id);
+          goles_local,
+          goles_visitante,
+          usuario_email,
+          perfiles!usuario_email (
+            nombre
+          )
+        `) // El "!" le dice que use esa columna específica para la relación
+        .eq('partido_id', partido.id);
+
+      if (error) {
+        console.error("Error Supabase:", error);
+      }
       setVotos(data || []);
     };
     cargar();
@@ -50,7 +56,7 @@ const ModalComparador = ({ partido, onClose }: { partido: any, onClose: () => vo
          {votos.map((v, i) => (
           <div key={i} className="...">
             <span className="font-bold">
-              {/* Así accedemos al nombre que trajimos de la otra tabla */}
+              {/* Importante: Accedemos a perfiles (en plural) que es el objeto que devuelve Supabase */}
               {v.perfiles?.nombre || v.usuario_email}
             </span>
             <span>{v.goles_local} - {v.goles_visitante}</span>
@@ -443,14 +449,6 @@ export default function Predicciones() {
                           🔍 COMPARAR PREDICCIONES
                         </button>
                       )}
-
-                      {/* Y esto ponelo al final de todo el return, antes del último </main> */}
-                      {partidoParaComparar && (
-                        <ModalComparador 
-                          partido={partidoParaComparar} 
-                          onClose={() => setPartidoParaComparar(null)} 
-                        />
-                      )}
                     </div>
                   );
                 })}
@@ -458,6 +456,13 @@ export default function Predicciones() {
           </section>
         ))}
       </div>
+      {/* Y esto ponelo al final de todo el return, antes del último </main> */}
+                      {partidoParaComparar && (
+                        <ModalComparador 
+                          partido={partidoParaComparar} 
+                          onClose={() => setPartidoParaComparar(null)} 
+                        />
+                      )}
     </main>
   );
 }
