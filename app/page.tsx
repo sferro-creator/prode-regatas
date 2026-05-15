@@ -74,6 +74,7 @@ export default function Home() {
     }
   };
 
+  // --- VISTA DE LOGIN / REGISTRO ---
   if (!user) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center p-8 bg-[#001D4A] text-white">
@@ -124,9 +125,24 @@ export default function Home() {
     );
   }
 
+  // --- VISTA PANEL PRINCIPAL (CON LOGOUT PERFECTO) ---
   return (
-    <main className="flex min-h-screen flex-col items-center justify-start p-8 bg-[#001D4A] text-white text-center font-sans">
-      <div className="w-32 h-32 relative mt-12 mb-6 p-1 rounded-full border-4 border-[#F6C83E] overflow-hidden bg-[#001D4A] shadow-xl">
+    <main className="flex min-h-screen flex-col items-center justify-start p-8 bg-[#001D4A] text-white text-center font-sans relative">
+      
+      {/* Botón Cerrar Sesión */}
+      <div className="w-full max-w-6xl flex justify-end md:absolute md:top-8 md:right-8 z-10 mb-4 md:mb-0">
+        <button
+          onClick={() => {
+            localStorage.removeItem('prode_user');
+            setUser(null);
+          }}
+          className="px-4 py-2 border border-red-500/30 bg-red-500/10 text-red-400 hover:bg-red-600 hover:text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 shadow-md"
+        >
+          🚪 Cerrar Sesión
+        </button>
+      </div>
+
+      <div className="w-32 h-32 relative mt-4 md:mt-12 mb-6 p-1 rounded-full border-4 border-[#F6C83E] overflow-hidden bg-[#001D4A] shadow-xl">
         <Image src="/logo-regatas.jpg" alt="Escudo" fill className="object-cover" />
       </div>
 
@@ -145,14 +161,14 @@ export default function Home() {
       <div className="h-1.5 w-40 bg-[#F6C83E] rounded-full mb-8 mx-auto shadow-lg"></div>
       
       <p className="text-[#F6C83E] font-semibold text-lg bg-[#002B71] px-6 py-2 rounded-full mb-12 shadow-inner inline-block">
-        ¡Hola, {user.nombre.split(' ')[0]}! — Panel Oficial Club de Regatas Bella Vista
+        ¡Hola, {user.nombre ? user.nombre.split(' ')[0] : 'Jugadora'}! — Panel Oficial Club de Regatas Bella Vista
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl text-left">
         <Link href="/predicciones" className="p-10 bg-[#002B71] rounded-3xl border border-[#003C9E] hover:border-[#F6C83E] transition-all shadow-2xl group">
           <div className="text-6xl mb-6 text-center group-hover:scale-110 transition-transform">⚽️</div>
           <h2 className="text-3xl font-bold mb-3 text-white">Mis Predicciones</h2>
-          <p className="text-slate-400 text-sm italic">Cargá tus pronosticos para sumar puntos en la tabla general.</p>
+          <p className="text-slate-400 text-sm italic">Cargá tus pronósticos para sumar puntos en la tabla general.</p>
         </Link>
         
         <Link href="/ranking" className="p-10 bg-[#002B71] rounded-3xl border border-[#003C9E] hover:border-[#F6C83E] transition-all shadow-2xl group">
