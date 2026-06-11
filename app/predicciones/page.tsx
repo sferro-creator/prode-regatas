@@ -55,13 +55,15 @@ const ModalComparador = ({ partido, onClose }: { partido: any, onClose: () => vo
 
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-      <div className="bg-[#002B71] p-6 rounded-3xl w-full max-w-md border border-[#F6C83E]">
-        <div className="flex justify-between mb-4">
+      {/* AGREGADO: max-h-[90vh] y flex flex-col para controlar la altura en el celu */}
+      <div className="bg-[#002B71] p-6 rounded-3xl w-full max-w-md border border-[#F6C83E] flex flex-col max-h-[90vh]">
+        <div className="flex justify-between mb-4 shrink-0">
           <h3 className="font-black text-[#F6C83E] uppercase italic">¿Qué votaron las demás?</h3>
           <button onClick={onClose} className="text-white">✕</button>
         </div>
         
-        <div className="space-y-4 mt-4">
+        {/* AGREGADO: overflow-y-auto y pr-1 para que scrollée acá adentro de manera prolija */}
+        <div className="space-y-4 mt-4 overflow-y-auto pr-1 flex-1">
             {votos.length > 0 ? (
               votos.map((v, i) => (
                 <div 
