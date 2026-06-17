@@ -3,7 +3,6 @@ import { supabase } from '@/lib/supabase';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 
-// Asegurate de que este fixture sea igual al de predicciones
 const fixture = [
     { id: '1', etapa: 'grupos', fase_nro: 1, grupo: 'GRUPO A', local: 'MÉXICO', bandera_local: '🇲🇽', visitante: 'SUDÁFRICA', bandera_visitante: '🇿🇦', fecha: '11 de Junio', fecha_iso: '2026-06-11', hora: '16:00', jugadores: ['Raúl Rangel', 'Carlos Acevedo', 'Guillermo Ochoa', 'César Montes', 'Johan Vásquez', 'Mateo Chávez', 'Jesús Gallardo', 'Israel Reyes', 'Jorge Sánchez', 'Erik Lira', 'Luis Romo', 'Obed Vargas', 'Brian Gutiérrez', 'Oberlín Pineda', 'Edson Álvarez', 'Gilberto Mora', 'César Huerta', 'Álvaro Fidalgo', 'Luis Chávez', 'Roberto Alvarado', 'Alexis Vega', 'Julián Quiñones', 'Santiago Gimenez', 'Guillermo Martínez', 'Armando González', 'Raúl Jiménez',
          'Ronwen Williams', 'Ricardo Goss', 'Sipho Chaine', 'Khuliso Mudau', 'Olwethu Makhanya', 'Bradley Cross', 'Aubrey Modiba', 'Thabang Matuludi', 'Nkosinathi Sibisi', 'Ime Okon', 'Samukele Kabini', 'Mbekezeli Mbokazi', 'Kamolego Sebelebele', 'Khulumani Ndamane', 'Teboho Mokoena', 'Thalente Mbatha', 'Jayden Adams', 'Shephelo Sithole', 'Oswin Appollis', 'Tshepang Moremi', 'Evidence Makgopa', 'Lyle Foster', 'Ioraam Rayners', 'Relebohile Mofokeng', 'Themba Zawne', 'Thapelo Maseko'] },

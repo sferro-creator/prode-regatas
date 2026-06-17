@@ -107,6 +107,25 @@ export default function Predicciones() {
   const [pronosticos, setPronosticos] = useState<any>({});
   const [etapaActiva, setEtapaActiva] = useState('grupos');
   const [faseGruposActiva, setFaseGruposActiva] = useState(1);
+  // --- ÚNICAS LÍNEAS AGREGADAS PARA LOS RESULTADOS REALES ---
+  const [resultadosOficiales, setResultadosOficiales] = useState<any>({});
+
+  useEffect(() => {
+    const cargarResultadosOficiales = async () => {
+      const { data } = await supabase
+        .from('resultados_reales')
+        .select('*');
+      
+      if (data) {
+        const mapaResultados: any = {};
+        data.forEach(res => {
+          mapaResultados[res.partido_id] = res;
+        });
+        setResultadosOficiales(mapaResultados);
+      }
+    };
+    cargarResultadosOficiales();
+  }, []);
 
   const fixture: Partido[] = [
     { id: '1', etapa: 'grupos', fase_nro: 1, grupo: 'GRUPO A', local: 'MÉXICO', bandera_local: '🇲🇽', visitante: 'SUDÁFRICA', bandera_visitante: '🇿🇦', fecha: '11 de Junio', fecha_iso: '2026-06-11', hora: '16:00', jugadores: ['Raúl Rangel', 'Carlos Acevedo', 'Guillermo Ochoa', 'César Montes', 'Johan Vásquez', 'Mateo Chávez', 'Jesús Gallardo', 'Israel Reyes', 'Jorge Sánchez', 'Erik Lira', 'Luis Romo', 'Obed Vargas', 'Brian Gutiérrez', 'Oberlín Pineda', 'Edson Álvarez', 'Gilberto Mora', 'César Huerta', 'Álvaro Fidalgo', 'Luis Chávez', 'Roberto Alvarado', 'Alexis Vega', 'Julián Quiñones', 'Santiago Gimenez', 'Guillermo Martínez', 'Armando González', 'Raúl Jiménez',
@@ -547,7 +566,7 @@ export default function Predicciones() {
                       >
                         {bloqueado ? "PERIODO FINALIZADO" : loading === partido.id ? "ENVIANDO..." : "CONFIRMAR PRONÓSTICO"}
                       </button>
-                      {/* Esto va justo abajo del botón de confirmar */}
+                      {/* Esto va justo abajo del botón de confirmar pronóstico */}
                       {bloqueado && (
                         <button 
                           onClick={() => setPartidoParaComparar(partido)}
@@ -555,6 +574,16 @@ export default function Predicciones() {
                         >
                           🔍 COMPARAR PREDICCIONES
                         </button>
+                      )}
+
+                      {/* NUEVO RENGLÓN: Muestra lo que cargás en la página de Admin */}
+                      {bloqueado && resultadosOficiales[partido.id] && (
+                        <div className="mt-4 p-3 bg-[#001D4A] rounded-xl border border-[#003C9E]/50 text-center text-xs font-bold text-slate-300">
+                          ⚽️ Resultado Oficial: <span className="text-[#F6C83E] font-black">{resultadosOficiales[partido.id].goles_local_real} - {resultadosOficiales[partido.id].goles_visitante_real}</span>
+                          {resultadosOficiales[partido.id].mvp_real && (
+                            <span className="block mt-1 text-[11px] text-slate-400 italic font-normal">🌟 MVP: {resultadosOficiales[partido.id].mvp_real}</span>
+                          )}
+                        </div>
                       )}
                     </div>
                   );
