@@ -34,6 +34,15 @@ export default function Ranking() {
 
   return (
     <main className="flex min-h-screen flex-col items-center p-4 md:p-10 bg-[#001D4A] text-white font-sans">
+    <div className="w-full max-w-7xl flex justify-start mb-8">
+      <Link 
+        href="/" 
+        className="flex items-center gap-2 text-slate-400 hover:text-[#F6C83E] transition-colors text-[11px] uppercase font-black tracking-[0.2em] group"
+      >
+        <span className="text-xl group-hover:-translate-x-1 transition-transform">←</span> 
+        Volver al Inicio
+      </Link>
+    </div>
       <header className="w-full max-w-4xl text-center mb-12">
         <h1 className="text-4xl md:text-6xl font-black text-[#F6C83E] uppercase tracking-tighter mb-4 italic">
           TABLA DE POSICIONES
