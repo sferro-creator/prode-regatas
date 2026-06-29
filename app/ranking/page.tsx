@@ -16,10 +16,11 @@ export default function Ranking() {
   useEffect(() => {
     async function obtenerRanking() {
       try {
-        // Llamamos directamente a la VISTA que creamos en SQL
-        const { data, error } = await supabase
-          .from('ranking')
-          .select('*');
+        // Reemplazá este bloque dentro de tu useEffect en app/ranking/page.tsx
+      const { data, error } = await supabase
+        .from('ranking')
+        .select('*')
+        .order('total_puntos', { ascending: false }); // <-- Asegura que la puntera vaya 1°
 
         if (error) throw error;
         setLista(data || []);
